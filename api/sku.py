@@ -27,3 +27,14 @@ class sku(SpuRequestHandler):
         sight_ctrl.distance = 100
         data = sight_ctrl.getResponse()
         return self._response(Pyobject(Error.success, data))
+
+class sight(SpuRequestHandler):
+    _logging = SpuLogging(module_name="sku", class_name="sight")
+
+    def detail(self,
+               scenic_id={"adef": 0, "atype": int}):
+        sight_ctrl = top.api.TripScenicGetRequest()
+        sight_ctrl.scenic_id = scenic_id
+        data = sight_ctrl.getResponse()
+        return self._response(Pyobject(Error.success, data))
+        

@@ -28,7 +28,8 @@ a = top.api.UserGetRequest()
 '''
 # a = top.api.UserGetRequest()
 # a = top.api.ProductsSearchRequest()
-a = top.api.TripScenicSearchRequest()
+a = top.api.TripScenicGetRequest()
+# a = top.api.TripScenicSearchRequest()
 # a = top.api.TmallProductSpecsGetRequest()
 
 
@@ -37,10 +38,8 @@ a = top.api.TripScenicSearchRequest()
 a.set_app_info(top.appinfo("appkey","*******"))
 '''
 
-a.fields = "product_id, name, pic_url, cid, props, price, tsc"
-a.keywords = "乐园"
-a.source_point = "120,30"
-a.distance = 100
+# a.fields = "product_id, name, pic_url, cid, props, price, tsc"
+a.scenic_id = 1126
 
 try:
     import ipdb
