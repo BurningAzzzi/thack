@@ -11,6 +11,7 @@ dynamic gen config vars
 import sys
 import os
 import logging
+from pymongo import MongoClient
 from tornado.options import define, options, parse_command_line, enable_pretty_logging
 import sputnik.SpuConfig as SpuConfig
 
@@ -117,15 +118,8 @@ DBCNF = {
 RONGCLOUD_APP_KEY = cm.RONGCLOUD_APP_KEY
 RONGCLOUD_APP_SECRET = cm.RONGCLOUD_APP_SECRET
 
-# mogodb config
-MONGO_DBCNF = {
-    'host' : cm.MONGO_DB_HOST,
-    'port' : cm.MONGO_DB_PORT,
-    'database' : cm.MONGO_DB_DATABASE,
-    'user' : cm.MONGO_DB_USER,
-    'passwd' : cm.MONGO_DB_PASSWORD,
-    'debug' : DEBUG
-    }
+mongo = MongoClient(cm.MONGO_DB_HOST, cm.MONGO_DB_PORT)
+mongo = mongo[cm.MONGO_DB_DATABASE]
 
 # rpc service
 RPC_SERVER_ADDRESS = cm.RPC_SERVER_ADDRESS

@@ -7,6 +7,7 @@
 import json
 from api.base import SpuLogging, SpuRequestHandler, Error, Pyobject, PyobjectList, POST
 from sputnik.SpuDB import SpuDBManager
+from config import mongo
 
 mysql_conn = SpuDBManager.get_spudb()
 
@@ -52,17 +53,18 @@ class message(SpuRequestHandler):
         return self._response(Pyobject(Error.success, data))
 
     def search(self,
-        user_id={"atype": int, "adef": 0},
-        latitude={"atype": float, "adef": 0},
-        longitude={"atype": float, "adef": 0},
-        category_id={"atype": int, "adef": 0}
-    ):
+               latitude={"atype": float, "adef": 0},
+               longitude={"atype": float, "adef": 0},
+               category_id={"atype": int, "adef": 0},
+               distance={"atype": int, "adef": 1000},
+           ):
         """
             查找消息
         """
+        # db.message.find({"loc": {"$near": [130, 46], "$maxDistance": 10}})
+        message_list = mongo["message"].find({"loc": {"$near": [longitude, latitude], "$maxDistance": distance}})
+        
         sql = "select * from message where 1=1 "
-        if user_id != 0:
-            sql += ("and user_id = %s" % user_id)
         if latitude != 0 and longitude != 0:
             # 地理位置匹配
             pass
@@ -73,7 +75,14 @@ class message(SpuRequestHandler):
         for i in xrange(0,len(data)):
             data[i]['create_on'] = str(data[i]['create_on']);
 
-        return self._response(Pyobject(Error.success, data))        
+        return self._response(Pyobject(Error.success, data))
+
+    def list(self,
+             user_id={"atype": int, "adef": 0}):
+        """获取单个用户的消息列表"""
+        sql = "select * from message where user_id = %s;"
+        data = mysql_conn.query(sql)
+        return self._response(Pyobject(Error.success, data))
 
 class sku_type(SpuRequestHandler):
     _logging = SpuLogging(module_name="message", class_name="type")
@@ -100,6 +109,7 @@ class category(SpuRequestHandler):
 
     def get(self):
         sql = "select * from category"
+        data = mysql_conn.query(sql)
         return self._response(Pyobject(Error.success, data))
 
     def getById(self,
