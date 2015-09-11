@@ -89,6 +89,7 @@ class sku_type(SpuRequestHandler):
 
     def get(self):
         sql = "select * from sku_type"
+        data = mysql_conn.query(sql)
         return self._response(Pyobject(Error.success, data))
 
     def getById(self,
