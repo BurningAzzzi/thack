@@ -4,10 +4,11 @@
 # Author: Master Yumi
 # Email : yumi@meishixing.com
 
-import json
 from api.base import SpuLogging, SpuRequestHandler, Error, Pyobject, PyobjectList, POST
 from sputnik.SpuDB import SpuDBManager
 from config import mongo
+from bson.son import SON
+from util import calculate_distance
 
 mysql_conn = SpuDBManager.get_spudb()
 
@@ -61,21 +62,24 @@ class message(SpuRequestHandler):
         """
             查找消息
         """
-        # db.message.find({"loc": {"$near": [130, 46], "$maxDistance": 10}})
-        message_list = mongo["message"].find({"loc": {"$near": [longitude, latitude], "$maxDistance": distance}})
-        
-        sql = "select * from message where 1=1 "
-        if latitude != 0 and longitude != 0:
-            # 地理位置匹配
-            pass
-        if category_id != 0:
-            sql += ("and category_id = %s" % category_id)
-
-        data = mysql_conn.query(sql)
-        for i in xrange(0,len(data)):
-            data[i]['create_on'] = str(data[i]['create_on']);
-
-        return self._response(Pyobject(Error.success, data))
+        cond = {}
+        if category_id:
+            cond["category_id"] = category_id
+        message_list = mongo.message.find({"loc": SON([("$near", [longitude, latitude]), ("$maxDistance", distance)])})
+        data = []
+        for message in message_list:
+            message_id = message["id"]
+            sql = "select * from message where id = %s;" % (message_id)
+            message_info = mysql_conn.query(sql)
+            if not message_info:
+                continue
+            message_info = message_info[0]
+            message_info["create_on"] = str(message_info["create_on"])
+            point_user = (longitude, latitude)
+            point_message = (message_info["longitude"], message_info["latitude"])
+            message_info["distance"] = calculate_distance(point_user, point_message)
+            data.append(message_info)
+        return self._response(PyobjectList(Error.success, data))
 
     def list(self,
              user_id={"atype": int, "adef": 0}):
