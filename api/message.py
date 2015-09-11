@@ -4,10 +4,12 @@
 # Author: Master Yumi
 # Email : yumi@meishixing.com
 
-import json
 from api.base import SpuLogging, SpuRequestHandler, Error, Pyobject, PyobjectList, POST
 from sputnik.SpuDB import SpuDBManager
 from config import mongo
+from bson.son import SON
+from util import calculate_distance, to_utf8
+from models.message_model import MessageModel
 
 mysql_conn = SpuDBManager.get_spudb()
 
@@ -23,10 +25,10 @@ class message(SpuRequestHandler):
             latitude={"atype": float, "adef": 0.0},
             longitude={"atype": float, "adef": 0.0},
             content={"atype": unicode, "adef": ""},
-            audio_url={"atype": str, "adef":""},
-            picture_url={"atype": str, "adef":""},
-            category_id={"atype": int,"adef":-1},
-            tags={"atype":unicode,"adef":""},
+            audio_url={"atype": str, "adef": ""},
+            picture_url={"atype": str, "adef": ""},
+            category_id={"atype": int,"adef": 0},
+            tags={"atype":unicode,"adef": ""},
             with_sku_id={"atype": int, "adef": 0},
             with_sku_type={"atype": int, "adef": 0}
     ):
@@ -37,52 +39,70 @@ class message(SpuRequestHandler):
         tags = tags.encode("utf8")
         if user_id == 0 or latitude == 0 or longitude == 0:
             return self._response(Pyobject(Error.param_error))
-
-        sql = "insert into message(user_id,latitude,longitude,content,audio_url,picture_url,with_sku_id,with_sku_type,create_on,category_id,tags) values(%s,%s,%s,'%s','%s','%s',%s,%s,now(),%s,'%s')" % (
-            user_id, 
-            latitude,
-            longitude,
-            content,
-            audio_url,
-            picture_url,
-            with_sku_id,
-            with_sku_type,
-            category_id,
-            tags)
-        data = mysql_conn.execsql(sql)
-        return self._response(Pyobject(Error.success, data))
+        message_obj = MessageModel.object()
+        message_obj.user_id = user_id
+        message_obj.latitude = latitude
+        message_obj.longitude = longitude
+        message_obj.content = content
+        message_obj.audio_url = audio_url
+        message_obj.picture_url = picture_url
+        message_obj.with_sku_id = with_sku_id
+        message_obj.with_sku_type = with_sku_type
+        message_obj.category_id = category_id
+        message_obj.tags = tags
+        message_id = message_obj.insert()
+        # 插入mongodb
+        mongo.message.insert({"id": int(message_id), "loc": [longitude, latitude], "category_id": category_id})
+        return self._response(Pyobject(Error.success, message_id))
 
     def search(self,
                latitude={"atype": float, "adef": 0},
                longitude={"atype": float, "adef": 0},
                category_id={"atype": int, "adef": 0},
                distance={"atype": int, "adef": 1000},
-           ):
+    ):
         """
             查找消息
         """
-        # db.message.find({"loc": {"$near": [130, 46], "$maxDistance": 10}})
-        message_list = mongo["message"].find({"loc": {"$near": [longitude, latitude], "$maxDistance": distance}})
-        
-        sql = "select * from message where 1=1 "
-        if latitude != 0 and longitude != 0:
-            # 地理位置匹配
-            pass
-        if category_id != 0:
-            sql += ("and category_id = %s" % category_id)
-
-        data = mysql_conn.query(sql)
-        for i in xrange(0,len(data)):
-            data[i]['create_on'] = str(data[i]['create_on']);
-
-        return self._response(Pyobject(Error.success, data))
+        cond = {}
+        if category_id:
+            cond["category_id"] = category_id
+        message_list = mongo.message.find({"loc": SON([("$near", [longitude, latitude]), ("$maxDistance", distance)])})
+        data = []
+        for message in message_list:
+            message_id = message["id"]
+            message_t = MessageModel.table()
+            message_obj = MessageModel.object()
+            cond = message_t.id == message_id
+            if not message_obj.find(cond):
+                continue
+            message_info = {}
+            message_info["id"] = message_obj.id
+            message_info["user_id"] = message_obj.user_id
+            message_info["latitude"] = message_obj.latitude
+            message_info["longitude"] = message_obj.longitude
+            message_info["content"] = message_obj.content
+            message_info["audio_url"] = message_obj.audio_url
+            message_info["picture_url"] = message_obj.picture_url
+            message_info["with_sku_id"] = message_obj.with_sku_id
+            message_info["with_sku_type"] = message_obj.with_sku_type
+            message_info["category_id"] = message_obj.category_id
+            message_info["tags"] = message_obj.tags
+            message_info["create_on"] = to_utf8(message_obj.create_on)
+            point_user = (longitude, latitude)
+            point_message = (message_info["longitude"], message_info["latitude"])
+            message_info["distance"] = calculate_distance(point_user, point_message)
+            data.append(message_info)
+        return self._response(PyobjectList(Error.success, data))
 
     def list(self,
              user_id={"atype": int, "adef": 0}):
         """获取单个用户的消息列表"""
-        sql = "select * from message where user_id = %s;"
-        data = mysql_conn.query(sql)
-        return self._response(Pyobject(Error.success, data))
+        message_t = MessageModel.table()
+        cond = message_t.user_id == user_id
+        message_list = MessageModel.objectlist()
+        message_list.find(cond)
+        return self._response(PyobjectList(Error.success, message_list))
 
 class sku_type(SpuRequestHandler):
     _logging = SpuLogging(module_name="message", class_name="type")
@@ -93,12 +113,12 @@ class sku_type(SpuRequestHandler):
         return self._response(Pyobject(Error.success, data))
 
     def getById(self,
-        id={"atype":int,"adef":0}
+                sku_id={"atype":int,"adef":0}
     ):
-        if id == 0:
+        if sku_id == 0:
             return self._response(Pyobject(Error.param_error))
 
-        sql = "select * from sku_type where id = %s" % id
+        sql = "select * from sku_type where id = %s" % sku_id
         data = mysql_conn.query(sql)
         if len(data) > 0:
             return self._response(Pyobject(Error.success, data[0]))
