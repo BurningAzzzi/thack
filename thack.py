@@ -24,13 +24,12 @@ def init():
     dbc.connection()
     SpuDBManager.add_spudb(dbc)
 
-    mongodb = SpuMongodb(MONGO_DBCNF)
-    mongodb.connection()
-    SpuContext.init_context(dbc, mongodb)
+    SpuContext.init_context(dbc, None)
 
     SpuDOFactory.init_factory(DEBUG)
     SpuUOM.import_module("sku")
     SpuUOM.import_module("message")
+    SpuUOM.import_module("test")
     SpuUOM.load()
 
 def start():
