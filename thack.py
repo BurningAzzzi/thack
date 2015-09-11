@@ -30,6 +30,7 @@ def init():
 
     SpuDOFactory.init_factory(DEBUG)
     SpuUOM.import_module("sku")
+    SpuUOM.import_module("message")
     SpuUOM.load()
 
 def start():

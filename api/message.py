@@ -13,9 +13,16 @@ class message(SpuRequestHandler):
 
     @POST
     def add(self,
-            lat={"atype": float, "adef": 0.0},
-            lon={"atype": float, "adef": 0.0},
+            user_id={"atype": int, "adef": 0},
+            latitude={"atype": float, "adef": 0.0},
+            longitude={"atype": float, "adef": 0.0},
             content={"atype": unicode, "adef": ""},
+            audio_url={"atype": str, "adef":""},
+            image_url={"atype": str, "adef":""},
+            with_sku_id={"atype": int, "adef": 0},
+            with_sku_type={"atype": int, "adef": 0}
     ):
-        pass
+        content = content.encode("utf8")
+
+        return self._response(Pyobject(Error.param_error))
     
