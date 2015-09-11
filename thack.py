@@ -29,7 +29,7 @@ def init():
     SpuContext.init_context(dbc, mongodb)
 
     SpuDOFactory.init_factory(DEBUG)
-
+    SpuUOM.import_module("sku")
     SpuUOM.load()
 
 def start():
