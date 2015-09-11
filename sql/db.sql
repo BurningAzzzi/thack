@@ -4,15 +4,15 @@ create table message(
 	id int(4) not null primary key auto_increment,
 	user_id int(4) not null,
 	content varchar(255) not null,
-	audio_url varchar(255),
-	picture_url varchar(255),
+	audio_url varchar(255) not null,
+	picture_url varchar(255) not null,
 	latitude double(9,6) not null,
 	longitude double(9,6) not null,	
 	create_on datetime not null,
-	tags varchar(255),
-	category_id int(4),
-	with_sku_type int(4),
-	with_sku_id int(4)
+	tags varchar(255) not null,
+	category_id int(4) not null,
+	with_sku_type int(4) not null,
+	with_sku_id int(4) not null
 )default charset=utf8;
 
 -- 用户
@@ -59,7 +59,7 @@ create table im(
 	id int(4) not null primary key auto_increment,
 	from_user_id int(4) not null,
 	to_user_id int(4) not null,
-	content text,
+	content text not null,
 	create_on datetime not null
 )default charset=utf8;
 
