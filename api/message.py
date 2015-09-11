@@ -6,12 +6,13 @@
 
 import json
 from api.base import SpuLogging, SpuRequestHandler, Error, Pyobject, PyobjectList, POST
+from sputnik.SpuDB import SpuDBManager
 
+mysql_conn = SpuDBManager.get_spudb()
 
 class message(SpuRequestHandler):
     _logging = SpuLogging(module_name="message", class_name="message")
 
-    @POST
     def add(self,
             user_id={"atype": int, "adef": 0},
             latitude={"atype": float, "adef": 0.0},
@@ -23,6 +24,7 @@ class message(SpuRequestHandler):
             with_sku_type={"atype": int, "adef": 0}
     ):
         content = content.encode("utf8")
-
+        sql = "select * from user;"
+        x = mysql_conn.query(sql)
         return self._response(Pyobject(Error.param_error))
     
