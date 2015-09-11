@@ -31,6 +31,7 @@ def init():
     SpuUOM.import_module("message")
     SpuUOM.import_module("mark")
     SpuUOM.import_module("im")
+    SpuUOM.import_module("user")
     SpuUOM.import_module("test")
     SpuUOM.load()
 

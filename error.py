@@ -58,6 +58,8 @@ Error.unlogin = (401, '用户未登录')
 Error.param_error = (code(), '参数值或参数类型错误')
 Error.order_submit_failure = (code(), '订单提交失败')
 Error.not_found = (code(), '未找到匹配数据')
+Error.password_error = (code(),'密码错误')
+Error.user_not_found = (code(), '用户名错误')
 
 Error.load_code_dict()
 
