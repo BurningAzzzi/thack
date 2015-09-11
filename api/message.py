@@ -73,8 +73,27 @@ class message(SpuRequestHandler):
         for i in xrange(0,len(data)):
             data[i]['create_on'] = str(data[i]['create_on']);
 
-
         return self._response(Pyobject(Error.success, data))        
+
+class sku_type(SpuRequestHandler):
+    _logging = SpuLogging(module_name="message", class_name="type")
+
+    def get(self):
+        sql = "select * from sku_type"
+        return self._response(Pyobject(Error.success, data))
+
+    def getById(self,
+        id={"atype":int,"adef":0}
+    ):
+        if id == 0:
+            return self._response(Pyobject(Error.param_error))
+
+        sql = "select * from sku_type where id = %s" % id
+        data = mysql_conn.query(sql)
+        if len(data) > 0:
+            return self._response(Pyobject(Error.success, data[0]))
+        else:
+            return self._response(Pyobject(Error.not_found))     
 
 class category(SpuRequestHandler):
     _logging = SpuLogging(module_name="message", class_name="category")
