@@ -98,14 +98,10 @@ from sputnik.SpuFactory import *
 from sputnik.SpuRequest import SpuRequestHandler
 
 # global config
-AMQP_VHOST = cm.AMQP_VHOST
 SpuConfig.SpuDebug = DEBUG
 SpuFieldFilter.debug = DEBUG
 SPUFS_IMAGE_CNF = cm.SPUFS_IMAGE_CNF
 version = 0.1
-
-VC_REDIS_CONF = cm.VC_REDIS_CONF
-OSS_DIR = cm.OSS_DIR
 
 # database config
 DBCNF = {
@@ -115,17 +111,6 @@ DBCNF = {
     'database' : cm.DB_DATABASE,
     'user' : cm.DB_USER,
     'passwd' : cm.DB_PASSWORD,
-    'debug' : DEBUG
-    }
-
-# database tailor config
-TAILOR_DBCNF = {
-    'dbtype' : SpuDB_Tornado,
-    'host' : cm.TAILOR_DB_HOST,
-    'port' : cm.TAILOR_DB_PORT,
-    'database' : cm.TAILOR_DB_DATABASE,
-    'user' : cm.TAILOR_DB_USER,
-    'passwd' : cm.TAILOR_DB_PASSWORD,
     'debug' : DEBUG
     }
 

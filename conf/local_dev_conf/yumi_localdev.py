@@ -13,17 +13,11 @@ from cache_config_dev import *
 
 LOCAL_ADDRESS = '127.0.0.1'
 
-DB_PORT = 6033
-DB_HOST = '115.236.23.187:6033'
-DB_DATABASE = 'leo_dev'
-DB_USER = 'root'
-DB_PASSWORD = 'shuotao1234!@#$shuotao'
-
-TAILOR_DB_PORT = 6033
-TAILOR_DB_HOST = '115.236.23.187:6033'
-TAILOR_DB_DATABASE = 'tailor'
-TAILOR_DB_USER = 'root'
-TAILOR_DB_PASSWORD = 'shuotao1234!@#$shuotao'
+DB_PORT = 3306
+DB_HOST = '121.40.236.133'
+DB_DATABASE = 'thack_dev'
+DB_USER = 'eleven'
+DB_PASSWORD = 'password'
 
 MONGO_DB_PORT = 27017
 MONGO_DB_HOST = '115.236.23.187'
