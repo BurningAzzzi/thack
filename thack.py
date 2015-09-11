@@ -29,6 +29,8 @@ def init():
     SpuDOFactory.init_factory(DEBUG)
     SpuUOM.import_module("sku")
     SpuUOM.import_module("message")
+    SpuUOM.import_module("mark")
+    SpuUOM.import_module("im")
     SpuUOM.import_module("test")
     SpuUOM.load()
 
