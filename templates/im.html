@@ -24,53 +24,13 @@
         </ul>
     </div>
     <div data-role="content" class="container" role="main">
-        <ul class="content-reply-box mg10">
-            <li class="odd">
-                <a class="user" href="#"><img class="img-responsive avatar_" src="/static/images/avatar-1.png" alt=""><span class="user-name">奔波儿灞</span></a>
-                <div class="reply-content-box">
-                	<span class="reply-time">03-08 15：00</span>
-                    <div class="reply-content pr">
-                    	<span class="arrow">&nbsp;</span>
-                    	为什么小鑫的名字里有三个金呢？
-                    </div>
-                </div>
-            </li>
-            <li class="even">
-                <a class="user" href="#"><img class="img-responsive avatar_" src="/static/images/avatar-1.png" alt=""><span class="user-name">灞波儿奔</span></a>
-                <div class="reply-content-box">
-                	<span class="reply-time">03-08 15：10</span>
-                    <div class="reply-content pr">
-                    	<span class="arrow">&nbsp;</span>
-                    	他命里缺金，所以取名叫鑫，有些人命里缺水，就取名叫淼，还有些人命里缺木就叫森。
-                    </div>
-                </div>
-            </li>
-            <li class="odd">
-                <a class="user" href="#"><img class="img-responsive avatar_" src="/static/images/avatar-1.png" alt=""><span class="user-name">奔波儿灞</span></a>
-                <div class="reply-content-box">
-                	<span class="reply-time">03-08 15：20</span>
-                    <div class="reply-content pr">
-                    	<span class="arrow">&nbsp;</span>
-                    	那郭晶晶命里缺什么？
-                    </div>
-                </div>
-            </li>
-            <li class="even">
-                <a class="user" href="#"><img class="img-responsive avatar_" src="/static/images/avatar-1.png" alt=""><span class="user-name">灞波儿奔</span></a>
-                <div class="reply-content-box">
-                	<span class="reply-time">03-08 15：30</span>
-                    <div class="reply-content pr">
-                    	<span class="arrow">&nbsp;</span>
-                    	此处省略一百字...
-                    </div>
-                </div>
-            </li>
+        <ul class="content-reply-box mg10" id="content-list">
         </ul>
         <ul class="content-reply-box mg10">
             <li>
                 <div class="reply-content-box">
                     <div class="reply-content pr">
-                    	<input type="text" style="width:100%;" placeholder="请输入..."/>
+                    	<input type="text" style="width:100%;border:none;" id="input-field" placeholder="请输入..."/>
                     </div>
                 </div>
             </li>
@@ -80,15 +40,57 @@
 <script type="text/javascript" src="/static/js/jquery.min.js"></script>
 <script type="text/javascript" src="/static/js/jquery.mobile-1.4.0-rc.1.js"></script>
 <script type="text/javascript">
+	var parsedData = eval('(' + "{{pyobject}}" + ')');
+	var from_user_id = parsedData.result.from_user_id;
+	var to_user_id = parsedData.result.to_user_id;
+	var from_user_name = parsedData.result.from_user_name;
+	var to_user_name = parsedData.result.to_user_name;
+	var last_id = 0;
+
 	$(function(){
-		var parsedData = eval('(' + "{{pyobject}}" + ')');
-		$('.list-group-item,.menu a').click(function(){
-			$.mobile.changePage($(this).attr('href'), {
-				transition : 'flip', //转场效果
-				reverse : true       //默认为false,设置为true时将导致一个反方向的转场
-			});	
+		$(document).on("keydown",function(e){
+			if (event.keyCode == 13){
+				var content = $("#input-field").val();
+				if (content != '') {
+				    $.post("/im/im/add",{from_user_id:from_user_id,to_user_id:to_user_id,content:content},function(data){
+						data = eval('(' + data + ')');
+				    	requestContactContent(from_user_id, to_user_id);
+				    });
+				}
+				$("#input-field").val('');
+		  	}
 		});
+		requestContactContent(from_user_id, to_user_id);
+		setInterval(function(){
+			requestContactContent(from_user_id, to_user_id);
+		},100);
 	});
+
+	var requestContactContent = function(from,to){
+		$.get("/im/im/getContactContent",{
+			from_user_id:from,
+			to_user_id:to,
+			last_id:last_id
+		},function(data){
+			var $contentList = $("#content-list");
+			// $contentList.empty();
+			data = eval('(' + data + ')');
+			for (var i = data.result.length-1; i >= 0; i--) {
+				var item = data.result[i];
+				var li;
+				if (item.from_user_id === from) {
+					li = "<li class='even'><a class='user' href='#'><img class='img-responsive avatar_' src='/static/images/avatar-1.png' alt='><span class='user-name'>"+from_user_name+"</span></a><div class='reply-content-box'><span class='reply-time'>"+item.create_on+"</span><div class='reply-content pr'><span class='arrow'>&nbsp;</span><pre>"+item.content+"</pre></div></div></li>";
+				}else{
+					li = "<li class='odd'><a class='user' href='#'><img class='img-responsive avatar_' src='/static/images/avatar-1.png' alt='><span class='user-name'>"+to_user_name+"</span></a><div class='reply-content-box'><span class='reply-time'>"+item.create_on+"</span><div class='reply-content pr'><span class='arrow'>&nbsp;</span><pre>"+item.content+"</pre></div></div></li>";
+				}
+				last_id = item.id;
+				$contentList.append(li);
+			};
+			$('body').scrollTop($('body')[0].scrollHeight);
+		}).error(function(e){
+			console.log(e);
+		});
+	}
 </script>
 </body>
 </html>

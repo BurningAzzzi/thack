@@ -90,7 +90,7 @@ class im(SpuRequestHandler):
         output = {}
         if len(data) > 0:
             output['from_user_name'] = data[0]['from_user_name'].encode("utf8")
-            output['to_user_name'] = data[0]['from_user_name'].encode("utf8")
+            output['to_user_name'] = data[0]['to_user_name'].encode("utf8")
             output['from_user_id'] = from_user_id
             output['to_user_id'] = to_user_id
 
