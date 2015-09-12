@@ -1,76 +1,62 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-	<title>IM</title>
+	<title>创建路线</title>
 	<meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.min.css">    
-    <link rel="stylesheet" type="text/css" href="/static/css/album.css">    
+    <link rel="stylesheet" type="text/css" href="/static/css/album.css">
 </head>
 <body>
 <div id="map">
 </div>
 <div id="album">
 	<ul id="image_list">
+		{% set image_list = pyobject.get("result", {}).get("image_list", []) %}
+		{% for image_info in image_list %}
 		<li>
 			<div>
-				<img image_id="1" src="http://imglf1.nosdn.127.net/img/UzhkNHIvRmZUelZINmRQVmlYZU56bGRlV09QSXFRdWtjczJrNEVEMWI3MU1zcU1Ta29tRFpnPT0.jpg?imageView&thumbnail=500x0&quality=96&stripmeta=0&type=jpg">
+				<img image_id="{{image_info["id"]}}" src="{{image_info.get("url", "")}}">
 			</div>
 		</li>
-		<li>
-			<div>
-				<img image_id="2" src="http://imglf1.nosdn.127.net/img/UzhkNHIvRmZUelZINmRQVmlYZU56bGRlV09QSXFRdWtjczJrNEVEMWI3MU1zcU1Ta29tRFpnPT0.jpg?imageView&thumbnail=500x0&quality=96&stripmeta=0&type=jpg">
-			</div>
-		</li>
-		<li>
-			<div>
-				<img image_id="3" src="http://imglf1.nosdn.127.net/img/UzhkNHIvRmZUelZINmRQVmlYZU56bGRlV09QSXFRdWtjczJrNEVEMWI3MU1zcU1Ta29tRFpnPT0.jpg?imageView&thumbnail=500x0&quality=96&stripmeta=0&type=jpg">
-			</div>
-		</li>
-		<li>
-			<div>
-				<img image_id="4" src="http://imglf1.nosdn.127.net/img/UzhkNHIvRmZUelZINmRQVmlYZU56bGRlV09QSXFRdWtjczJrNEVEMWI3MU1zcU1Ta29tRFpnPT0.jpg?imageView&thumbnail=500x0&quality=96&stripmeta=0&type=jpg">
-			</div>
-		</li>
-		<li>
-			<div>
-				<img image_id="5" src="http://imglf1.nosdn.127.net/img/UzhkNHIvRmZUelZINmRQVmlYZU56bGRlV09QSXFRdWtjczJrNEVEMWI3MU1zcU1Ta29tRFpnPT0.jpg?imageView&thumbnail=500x0&quality=96&stripmeta=0&type=jpg">
-			</div>
-		</li>
-		<li>
-			<div>
-				<img image_id="6" src="http://imglf1.nosdn.127.net/img/UzhkNHIvRmZUelZINmRQVmlYZU56bGRlV09QSXFRdWtjczJrNEVEMWI3MU1zcU1Ta29tRFpnPT0.jpg?imageView&thumbnail=500x0&quality=96&stripmeta=0&type=jpg">
-			</div>
-		</li>
+		{% end %}
+		<!-- http://imglf1.nosdn.127.net/img/UzhkNHIvRmZUelZINmRQVmlYZU56bGRlV09QSXFRdWtjczJrNEVEMWI3MU1zcU1Ta29tRFpnPT0.jpg?imageView&thumbnail=500x0&quality=96&stripmeta=0&type=jpg -->
 		<div class="clear"></div>
 	</ul>
 	<div id="location_list">[]</div>
 	<div><input role="button" class="form-control btn btn-default" id="save" type="button" value="创建线路" /></div>
 </div>
+<div id="global_user_id">{{pyobject.get("result", {}).get("user_id", "")}}</div>
 <script type="text/javascript" src="/static/js/jquery.min.js"></script>
+<script type="text/javascript" src="/static/js/mustache.js"></script>
 <script type="text/javascript">
 	function get_image_list(){
 		var id_list = [];
 		$("#image_list > li > .checked > img").each(function(){
 			id_list.push($(this).attr("image_id"));
 		});
-		alert(id_list);
+		return id_list
 	}
 	$(function (){
-		$("#image_list > li > div").click(function(){
+		// load image
+		$("#image_list > li > div").on('click', function(){
 			if($(this).hasClass("checked")) {
 				$(this).removeClass("checked");
 			}
 			else{
 				$(this).addClass("checked");
 			}
-		})
+		});
 		$("#save").click(function(){
-			get_image_list();
+			var user_id = $("#global_user_id").html();
+			id_list = get_image_list();
+			var url = "/route/route/add";
+			$.post(url, {"user_id": user_id, "resources": id_list.join()}, function(data){
+				alter("ok");
+			})
 		});
 	})
 </script>
-<!-- <script type="text/javascript" src="/static/js/jquery.mobile-1.4.0-rc.1.js"></script> -->
 </body>
 </html>

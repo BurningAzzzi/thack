@@ -9,12 +9,16 @@ body {
 }
 #map {
 	border: 1px solid black;
-	min-height: 300px;
+	position: fixed;
+	height: 100px;
+	width: 100%;
+	background: pink;
 }
 #album {
 	border: 1px solid black;
 	min-height: 400px;
 	padding-bottom: 20px;
+	padding-top: 300px;
 }
 #image_list {
 	font-size: 0px;
@@ -25,12 +29,13 @@ body {
 }
 #image_list li {
 	display: inline-block;
-	width: 33.3%;
+	width: 25%;
 	overflow: hidden;
 }
 #image_list li div {
 	overflow: hidden;
 	width: 90%;
+	height: 80px;
 	margin: 0px auto;
 	margin-top: 10px;
 	margin-bottom: 10px;

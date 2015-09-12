@@ -62,5 +62,7 @@ class resource(SpuRequestHandler):
     def album(self,
               user_id={"atype": int, "adef": ""}
     ):
-        self._html_render("resource.html", {})
-
+        sql = "select * from resource where user_id = %s" % user_id
+        data = mysql_conn.query(sql)
+        return self._html_render("resource.html", {"image_list": data, "user_id": user_id})
+    
