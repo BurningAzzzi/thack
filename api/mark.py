@@ -20,6 +20,8 @@ class mark(SpuRequestHandler):
     def add(self,
             user_id={"atype": int, "adef": 0},
             sight_id={"atype": int, "adef": 0},
+            longitude={"atype": float, "adef": 0.0},
+            latitude={"atype": float, "adef": 0.0}
     ):
         """
             添加签到信息
@@ -27,9 +29,16 @@ class mark(SpuRequestHandler):
         if user_id == 0 or sight_id == 0:
             return self._response(Pyobject(Error.param_error))
 
-        sql = "insert into mark(user_id,sight_id,create_on) values(%s,%s,now())" % (
+        sql = "select count(*) total from mark where sight_id = %s" % sight_id
+        result = mysql_conn.execsql(sql)
+        mark_order = result[0]['total']
+
+        sql = "insert into mark(user_id,sight_id,longitude,latitude,create_on) values(%s,%s,%s,%s,now(),%s)" % (
             user_id, 
-            sight_id)
+            sight_id,
+            longitude,
+            latitude,
+            mark_order)
         data = mysql_conn.execsql(sql)
         return self._response(Pyobject(Error.success, data))
 
@@ -44,6 +53,10 @@ class mark(SpuRequestHandler):
 
         sql = "select * from mark where user_id = %s" % user_id
         data = mysql_conn.query(sql)
+
+        for i in xrange(0,len(data)):
+            data[i]['create_on'] = str(data[i]['create_on'])
+
         return self._response(Pyobject(Error.success, data))
         
 

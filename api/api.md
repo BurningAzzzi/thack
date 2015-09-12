@@ -60,29 +60,35 @@
 10. with_sku_type: 推荐类型(可选)
 
 #### 听消息（查询消息）/message/message/search [get]
+##### 参数:
 1. longitude: 经度
 2. latitude: 纬度
-3. cateogry_id: 分类id
+3. cateogry_id: 分类id(可选)
 4. distance: 半径(单位米)
 
 #### 获取我发布的消息 /message/message/list [get]
+##### 参数:
 1. user_id: 用户id
 
 ### 旅行轨迹相关
 #### 添加轨迹 /route/route/add [post]
+##### 参数:
 1. user_id: 用户id
 2. latitude: 经度
 3. longitude: 纬度
 4. resources: 资源id列表（用逗号隔开）
 
 #### 获取我提交的轨迹列表 /route/route/list [get]
+##### 参数:
 1. user_id: 用户id
 
 #### 获取某条轨迹的详情 /route/route/getById [get]
+##### 参数:
 1. id: 轨迹id
 
 ### 景点相关
 #### 查询景点 /sku/sku/search
+##### 参数:
 1. keyword: 关键字
 2. lat: 纬度
 3. lon: 经度
@@ -90,4 +96,16 @@
 5. page: 页码
 
 #### 获取景点详情 /sku/sku/sight
+##### 参数:
 1. scenic_id: 景点id
+
+### 推送相关
+#### 当查看一条"说"的记录时，向"说"的作者推送
+##### 参数:
+1. from_user_id: 当前用户id
+2. message_id: 用户听的message的id
+
+#### 检查是否有推送信息
+>调用该接口并获取推送信息后，本次推送内容会被无效话，多次调用该接口只有第一次能获取推送内容
+##### 参数:
+1. user_id: 用户id
