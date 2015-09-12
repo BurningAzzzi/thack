@@ -91,13 +91,12 @@ class message(SpuRequestHandler):
             message_info["latitude"] = message_obj.latitude
             message_info["longitude"] = message_obj.longitude
             message_info["content"] = message_obj.content
-            message_info["audio_url"] = message_obj.audio_url
-            message_info["picture_url"] = message_obj.picture_url
             message_info["with_sku_id"] = message_obj.with_sku_id
             message_info["with_sku_type"] = message_obj.with_sku_type
             message_info["category_id"] = message_obj.category_id
             message_info["tags"] = message_obj.tags
             message_info["create_on"] = to_utf8(message_obj.create_on)
+            message_info["nice"] = message_obj.nice
             point_user = (longitude, latitude)
             point_message = (message_info["longitude"], message_info["latitude"])
             message_info["distance"] = calculate_distance(point_user, point_message)
@@ -112,6 +111,21 @@ class message(SpuRequestHandler):
         message_list = MessageModel.objectlist()
         message_list.find(cond)
         return self._response(PyobjectList(Error.success, message_list))
+
+    @POST
+    def nice(self,
+        id={"atype": int, "adef": 0}
+    ):
+        """
+        点赞
+        """
+        if id == 0:
+            return self._response(Pyobject(Error.param_error))
+
+        sql = "update message set nice = nice + 1 where id = %s" % id
+        mysql_conn.execsql(sql)
+        return self._response(Pyobject(Error.success))
+
 
 class sku_type(SpuRequestHandler):
     _logging = SpuLogging(module_name="message", class_name="type")
