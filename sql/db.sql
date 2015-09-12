@@ -74,9 +74,11 @@ create table mark(
 	sight_id int(4) not null,
 	latitude double(9,6) not null,
 	longitude double(9,6) not null,	
-	create_on datetime not null
+	create_on datetime not null,
+	mark_order int(4) not null
 )default charset=utf8;
 
+create unique index UK_USER_SIGHT on mark (user_id, sight_id); 
 -- -- 即时通信
 -- drop table im;
 -- create table im(

@@ -29,11 +29,16 @@ class mark(SpuRequestHandler):
         if user_id == 0 or sight_id == 0:
             return self._response(Pyobject(Error.param_error))
 
-        sql = "insert into mark(user_id,sight_id,longitude,latitude,create_on) values(%s,%s,%s,%s,now())" % (
+        sql = "select count(*) total from mark where sight_id = %s" % sight_id
+        result = mysql_conn.execsql(sql)
+        mark_order = result[0]['total']
+
+        sql = "insert into mark(user_id,sight_id,longitude,latitude,create_on) values(%s,%s,%s,%s,now(),%s)" % (
             user_id, 
             sight_id,
             longitude,
-            latitude)
+            latitude,
+            mark_order)
         data = mysql_conn.execsql(sql)
         return self._response(Pyobject(Error.success, data))
 
