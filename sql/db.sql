@@ -113,3 +113,12 @@ create table route_resources(
 	resource_id int(4) not null
 )default charset=utf8;
 
+drop table pushing;
+create table pushing(
+	id int(4) not null primary key auto_increment,
+	from_user_id int(4) not null,
+	to_user_id int(4) not null,
+	message_id int(4) not null,
+	enable int(4) not null default 1,
+	create_on datetime not null
+)default charset=utf8;

@@ -35,6 +35,7 @@ def init():
     SpuUOM.import_module("test")
     SpuUOM.import_module("route")
     SpuUOM.import_module("resource")
+    SpuUOM.import_module("pushing")
     SpuUOM.load()
 
 def start():

@@ -1084,18 +1084,21 @@ body .markdown-body
 <li>with_sku_type: 推荐类型(可选)</li>
 </ol>
 <h4 id="messagemessagesearch-get"><a name="user-content-messagemessagesearch-get" href="#messagemessagesearch-get" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>听消息（查询消息）/message/message/search [get]</h4>
+<h5 id="_12"><a name="user-content-_12" href="#_12" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>参数:</h5>
 <ol>
 <li>longitude: 经度</li>
 <li>latitude: 纬度</li>
-<li>cateogry_id: 分类id</li>
+<li>cateogry_id: 分类id(可选)</li>
 <li>distance: 半径(单位米)</li>
 </ol>
 <h4 id="messagemessagelist-get"><a name="user-content-messagemessagelist-get" href="#messagemessagelist-get" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>获取我发布的消息 /message/message/list [get]</h4>
+<h5 id="_13"><a name="user-content-_13" href="#_13" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>参数:</h5>
 <ol>
 <li>user_id: 用户id</li>
 </ol>
-<h3 id="_12"><a name="user-content-_12" href="#_12" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>旅行轨迹相关</h3>
+<h3 id="_14"><a name="user-content-_14" href="#_14" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>旅行轨迹相关</h3>
 <h4 id="routerouteadd-post"><a name="user-content-routerouteadd-post" href="#routerouteadd-post" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>添加轨迹 /route/route/add [post]</h4>
+<h5 id="_15"><a name="user-content-_15" href="#_15" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>参数:</h5>
 <ol>
 <li>user_id: 用户id</li>
 <li>latitude: 经度</li>
@@ -1103,15 +1106,18 @@ body .markdown-body
 <li>resources: 资源id列表（用逗号隔开）</li>
 </ol>
 <h4 id="routeroutelist-get"><a name="user-content-routeroutelist-get" href="#routeroutelist-get" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>获取我提交的轨迹列表 /route/route/list [get]</h4>
+<h5 id="_16"><a name="user-content-_16" href="#_16" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>参数:</h5>
 <ol>
 <li>user_id: 用户id</li>
 </ol>
 <h4 id="routeroutegetbyid-get"><a name="user-content-routeroutegetbyid-get" href="#routeroutegetbyid-get" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>获取某条轨迹的详情 /route/route/getById [get]</h4>
+<h5 id="_17"><a name="user-content-_17" href="#_17" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>参数:</h5>
 <ol>
 <li>id: 轨迹id</li>
 </ol>
-<h3 id="_13"><a name="user-content-_13" href="#_13" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>景点相关</h3>
+<h3 id="_18"><a name="user-content-_18" href="#_18" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>景点相关</h3>
 <h4 id="skuskusearch"><a name="user-content-skuskusearch" href="#skuskusearch" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>查询景点 /sku/sku/search</h4>
+<h5 id="_19"><a name="user-content-_19" href="#_19" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>参数:</h5>
 <ol>
 <li>keyword: 关键字</li>
 <li>lat: 纬度</li>
@@ -1120,6 +1126,22 @@ body .markdown-body
 <li>page: 页码</li>
 </ol>
 <h4 id="skuskusight"><a name="user-content-skuskusight" href="#skuskusight" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>获取景点详情 /sku/sku/sight</h4>
+<h5 id="_20"><a name="user-content-_20" href="#_20" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>参数:</h5>
 <ol>
 <li>scenic_id: 景点id</li>
+</ol>
+<h3 id="_21"><a name="user-content-_21" href="#_21" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>推送相关</h3>
+<h4 id="_22"><a name="user-content-_22" href="#_22" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>当查看一条&rdquo;说&rdquo;的记录时，向&rdquo;说&rdquo;的作者推送</h4>
+<h5 id="_23"><a name="user-content-_23" href="#_23" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>参数:</h5>
+<ol>
+<li>from_user_id: 当前用户id</li>
+<li>message_id: 用户听的message的id</li>
+</ol>
+<h4 id="_24"><a name="user-content-_24" href="#_24" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>检查是否有推送信息</h4>
+<blockquote>
+<p>调用该接口并获取推送信息后，本次推送内容会被无效话，多次调用该接口只有第一次能获取推送内容</p>
+</blockquote>
+<h5 id="_25"><a name="user-content-_25" href="#_25" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>参数:</h5>
+<ol>
+<li>user_id: 用户id</li>
 </ol></article></body></html>
