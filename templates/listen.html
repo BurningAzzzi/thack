@@ -19,7 +19,7 @@
 			<div class="row">
 				<div class="col-md-1-1">
 					<div style="min-height:45px;width:100%;margin:0;padding:0;background-color:rgba(255,255,255,1);z-index:9999;position:fixed;text-align:center;">
-						<a href="#">
+						<a href="javascript:void(0);" id="btn-nice">
 							<span class="glyphicon glyphicon-thumbs-up" aria-hidden="true" style="top: 10px; right: 10px; font-size: 25px;"></span>赞
 						</a>
 					</div>
@@ -58,6 +58,12 @@
 		$("#btn-contact").on("click",function(){
 			location.href="/im/im/index?from_user_id="+user_id+"&to_user_id="+page_data.result.user_id;
 		});
+
+		$("#btn-nice").on("click",function(){
+			$.post("/message/message/nice",{id:message_id},function(data){
+				alert("操作成功");
+			});
+		});
 		$.get("/message/message/detail",{
 			id:message_id,
 		},function(data){
@@ -81,7 +87,7 @@
 			};
 
 			for (var i = 0; i < data.routes.length; i++) {
-				var content = '<a href="#"> <li class="list-group-item route-list">推荐线路'+ i +'号</li> </a>'; 
+				var content = '<a href="/route/route/detail?id='+data.routes[i].id+'"> <li class="list-group-item route-list">推荐线路'+ i +'号</li> </a>'; 
 				$("#content-route").append(content); 
 			};
 		});
