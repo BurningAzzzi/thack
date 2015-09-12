@@ -30,17 +30,25 @@ class mark(SpuRequestHandler):
             return self._response(Pyobject(Error.param_error))
 
         sql = "select count(*) total from mark where sight_id = %s" % sight_id
-        result = mysql_conn.execsql(sql)
+        result = mysql_conn.query(sql)
         mark_order = result[0]['total']
 
-        sql = "insert into mark(user_id,sight_id,longitude,latitude,create_on) values(%s,%s,%s,%s,now(),%s)" % (
+        sql = "insert into mark(user_id,sight_id,longitude,latitude,create_on,mark_order) values(%s,%s,%s,%s,now(),%s)" % (
             user_id, 
             sight_id,
             longitude,
             latitude,
-            mark_order)
-        data = mysql_conn.execsql(sql)
-        return self._response(Pyobject(Error.success, data))
+            mark_order+1)
+        id = -1
+        try:
+            id = mysql_conn.execsql(sql)
+        except Exception, e:
+            pass
+        else:
+            pass
+        finally:
+            pass
+        return self._response(Pyobject(Error.success, id))
 
     def get(self,
             user_id={"atype": int, "adef": 0},
