@@ -21,8 +21,7 @@ class route(SpuRequestHandler):
             user_id={"atype": int, "adef": 0},
             latitude={"atype": float, "adef": 0.0},
             longitude={"atype": float, "adef": 0.0},
-            resources={"atype": str, "adef": ""},
-            create_on={"atype": str, "adef": ""}
+            resources={"atype": str, "adef": ""}
     ):
         """
             路线上传
@@ -30,11 +29,10 @@ class route(SpuRequestHandler):
         if user_id == 0:
             return self._response(Pyobject(Error.param_error))
 
-        sql = "insert into route(user_id,longitude,latitude,create_on) values(%s,%s,%s,'%s')" % (
+        sql = "insert into route(user_id,longitude,latitude,create_on) values(%s,%s,%s,now())" % (
             user_id,
             longitude,
-            latitude,
-            create_on)
+            latitude)
         routeId = mysql_conn.execsql(sql)
 
         resourceIds = resources.split(",")
