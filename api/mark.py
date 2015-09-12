@@ -50,7 +50,7 @@ class mark(SpuRequestHandler):
         data = mysql_conn.query(sql)
 
         for i in xrange(0,len(data)):
-            data[i]['create_on'] = str(data[i][create_on])
+            data[i]['create_on'] = str(data[i]['create_on'])
 
         return self._response(Pyobject(Error.success, data))
         
