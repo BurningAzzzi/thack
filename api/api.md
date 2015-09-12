@@ -1,4 +1,5 @@
 # Thack Api List
+## Host: <a href="http://192.168.134.163:14010/">http://192.168.134.163:14010/</a>
 
 > 注意：未标明可选的均为必选参数！！！
 
@@ -24,6 +25,10 @@
 1. from_user_id: 发送者用户id
 2. to_user_id: 接收者用户id
 3. last_id: 最后消息id(可选)
+
+#### 聊天页面 /im/im/index [get]
+1. from_user_id: 发送者用户id
+2. to_user_id: 接收者用户id
 
 ### 资源相关
 #### 上传资源 /resource/resource/add [post]
@@ -82,3 +87,7 @@
 2. lat: 纬度
 3. lon: 经度
 4. distance: 半径
+5. page: 页码
+
+#### 获取景点详情 /sku/sku/sight
+1. scenic_id: 景点id
