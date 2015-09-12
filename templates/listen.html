@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>听</title>
+	<meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.min.css">    
+    <link rel="stylesheet" type="text/css" href="/static/css/style.css">    
+    <link rel="stylesheet" type="text/css" href="/static/css/jquery.mobile.flatui.css" />
+</head>
+<body>
+	<div>
+		
+		
+	</div>
+	<script type="text/javascript" src="/static/js/jquery.min.js"></script>
+	<script>
+	var page_data = eval('(' + "{{pyobject}}" + ')');
+	var message_id = page_data.result.id;
+	$(function(){
+		$.get("/message/message/detail",{
+			id:message_id,
+		},function(data){
+			data = eval('(' + data + ')');
+			data = data.result;
+			console.info(data);
+		});
+	});
+	</script>
+</body>
+</html>
