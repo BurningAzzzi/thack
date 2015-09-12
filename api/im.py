@@ -45,7 +45,7 @@ class im(SpuRequestHandler):
         if user_id == 0:
             return self._response(Pyobject(Error.param_error))
 
-        sql = "select * from (select to_user_id,user.username to_user_name, max(create_on)create_on,(select content from im temp where temp.from_user_id = %s and temp.to_user_id = main.to_user_id order by id desc limit 1)content from im main left join user on user.id=main.to_user_id where from_user_id = %s group by to_user_id)t order by id desc" % (user_id, user_id)
+        sql = "select * from (select id,to_user_id,user.username to_user_name, max(create_on)create_on,(select content from im temp where temp.from_user_id = %s and temp.to_user_id = main.to_user_id order by id desc limit 1)content from im main left join user on user.id=main.to_user_id where from_user_id = %s group by to_user_id)t order by id desc" % (user_id, user_id)
         data = mysql_conn.query(sql)
 
         for i in xrange(0,len(data)):

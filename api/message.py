@@ -103,6 +103,36 @@ class message(SpuRequestHandler):
             data.append(message_info)
         return self._response(PyobjectList(Error.success, data))
 
+    def detail(self,
+               id={"atype": int, "adef": 0}
+        ):
+        if id == 0:
+            return self._response(Pyobject(Error.param_error))
+
+        sql = "select * from message where id = %s" % id
+        data = mysql_conn.query(sql)
+        if len(data) > 0 :
+            data[0]['create_on'] = str(data[0]['create_on'])
+            
+            sql = "select t2.* from message_resources t1 left join resource t2 on t1.resource_id = t2.id where t1.message_id = %s" % id
+            message_resources = mysql_conn.query(sql)
+            for i in xrange(0,len(message_resources)):
+                data[i]['create_on'] = str(data[i]['create_on'])
+                
+            data[0]['resources'] = message_resources
+
+            sql = "select t2.* from message_routes t1 left join route t2 on t1.route_id = t2.id where t1.message_id = %s" % id
+            message_routes = mysql_conn.query(sql)
+            for i in xrange(0,len(message_routes)):
+                data[i]['create_on'] = str(data[i]['create_on'])
+                
+            data[0]['routes'] = message_routes
+            
+            return self._response(PyobjectList(Error.success, data[0]))
+        else:
+            return self._response(Pyobject(Error.not_found))
+
+
     def list(self,
              user_id={"atype": int, "adef": 0}):
         """获取单个用户的消息列表"""
@@ -125,6 +155,16 @@ class message(SpuRequestHandler):
         sql = "update message set nice = nice + 1 where id = %s" % id
         mysql_conn.execsql(sql)
         return self._response(Pyobject(Error.success))
+
+    def listen(self,
+               id={"atype": int, "adef": 0},
+    ):
+        """
+        听
+        """
+        return self._html_render("listen.html", {
+            "id": id,
+            })
 
 
 class sku_type(SpuRequestHandler):
