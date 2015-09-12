@@ -11,8 +11,8 @@
 <body>
 <div id="map">
 </div>
-<div id="global_markers">{{pyobject.get("resi;t", {}).get("markers", [])}}</div>
-<div id="global_user_id">{{pyobject.get("result", {}).get("user_id", "")}}</div>
+<div id="global_markers" style="display:none;">{{pyobject.get("result", {}).get("markers", [])}}</div>
+<div id="global_user_id" style="display:none;">{{pyobject.get("result", {}).get("user_id", "")}}</div>
 <script type="text/javascript" src="/static/js/jquery.min.js"></script>
 <script type="text/javascript" src="http://api.map.baidu.com/api?v=1.5&ak=nyyisBU10lusc09r43iPCptM"></script>
 <script type="text/javascript"> 
@@ -21,34 +21,42 @@
 	map.centerAndZoom(point, 15);                 // 初始化地图，设置中心点坐标和地图级别  
 	map.enableScrollWheelZoom();
 
-	// var marker = new BMap.Marker(point);    
+	// var marker = new BMap.Marker(point);
 	// map.addOverlay(marker);    
-
-	// draw line
-// 	var polyline = new BMap.Polyline([
-// 		new BMap.Point(120.030007, 30.286301),
-// 		new BMap.Point(120.062121, 30.296301),
-// //		new BMap.Point(120.042523, 30.272120)
-// 	], {strokeColor:"blue", strokeWeight:2, strokeOpacity:0.5});
-// 	map.addOverlay(polyline);
 
 	function add_marker(point){
 		var marker = new BMap.Marker(point);
 		map.addOverlay(marker);
 	}
 
-	function draw_line_list(point_list){
-		point_list_to_draw = []
-		for (var i = point_list.length - 1; i >= 0; i--) {
-			point_ = point_list[i];
-			point_to_draw = new BMap.Point(point_[0], point_[1]);
-			add_marker(point_to_draw);
-			point_list_to_draw.push(point_to_draw);
-		};
-		var polyline = new BMap.Polyline(point_list_to_draw, {strokeColor:"blue", strokeWeight:2, strokeOpacity:0.5});
-		map.addOverlay(polyline);
-		map.setViewport(point_list_to_draw);
+
+	// draw line
+	{% set markers = pyobject.get("result", {}).get("markers", []) %}
+	var point_list = [
+	{% for marker in markers %}
+		new BMap.Point({{marker.get("longitude", "")}}, {{marker.get("latitude", "")}}),
+	{% end %}
+	];
+	for (var i = point_list.length - 1; i >= 0; i--) {
+		add_marker(point_list[i]);
 	};
+	var polyline = new BMap.Polyline(point_list, {strokeColor:"blue", strokeWeight:2, strokeOpacity:0.5});
+	map.addOverlay(polyline);
+	map.setViewport(point_list);
+
+	
+	// function draw_line_list(point_list){
+	// 	point_list_to_draw = []
+	// 	for (var i = point_list.length - 1; i >= 0; i--) {
+	// 		point_ = point_list[i];
+	// 		point_to_draw = new BMap.Point(point_[0], point_[1]);
+	// 		add_marker(point_to_draw);
+	// 		point_list_to_draw.push(point_to_draw);
+	// 	};
+	// 	var polyline = new BMap.Polyline(point_list_to_draw, {strokeColor:"blue", strokeWeight:2, strokeOpacity:0.5});
+	// 	map.addOverlay(polyline);
+	// 	map.setViewport(point_list_to_draw);
+	// };
 	// draw_line_list([[120.030007, 30.286301], [120.062121, 30.296301], [120.042523, 30.272120]]);
 	// draw_line_list([[120.030007, 30.286301]]);
 
