@@ -29,13 +29,24 @@ class route(SpuRequestHandler):
         if user_id == 0:
             return self._response(Pyobject(Error.param_error))
 
+        resourceIds = resources.split(",")
+        if len(resourceIds) == 0:
+            return self._response(Pyobject(Error.param_error))
+
+        if latitude == 0.0 or longitude == 0.0:
+            sql = "select * from resource where id = %s" % resourceIds[0]
+            data = mysql_conn.query(sql)
+            if len(data) == 0:
+                return self._response(Pyobject(Error.param_error))
+            else:
+                longitude = data[0]['longitude']
+                latitude = data[0]['latitude']
         sql = "insert into route(user_id,longitude,latitude,create_on) values(%s,%s,%s,now())" % (
             user_id,
             longitude,
             latitude)
         routeId = mysql_conn.execsql(sql)
 
-        resourceIds = resources.split(",")
         for i in xrange(0,len(resourceIds)):
             sql = "insert into route_resources(route_id,resource_id) values(%s,%s)" % (routeId,resourceIds[i])
             mysql_conn.execsql(sql)
