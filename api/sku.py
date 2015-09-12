@@ -47,3 +47,8 @@ class sight(SpuRequestHandler):
         data = sight_ctrl.getResponse()
         return self._response(Pyobject(Error.success, data))
         
+    def page(self,
+             id={"adef": 0, "atype": int}
+    ):
+        return self._html_render("sight.html", {})
+
