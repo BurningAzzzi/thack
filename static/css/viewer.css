@@ -1,0 +1,50 @@
+* {
+	margin: 0px;
+	padding: 0px;
+}
+body {
+}
+.clear {
+	clear: both;
+}
+#map {
+	border: 1px solid black;
+	position: fixed;
+	height: 300px;
+	width: 100%;
+}
+#album {
+	border: 1px solid black;
+	min-height: 400px;
+	padding-bottom: 20px;
+	padding-top: 000px;
+}
+#image_list {
+	font-size: 0px;
+	list-style-type: none;
+	width: 100%;
+	padding: 0px;
+	margin: 0px;
+}
+#image_list li {
+	display: inline-block;
+	width: 25%;
+	overflow: hidden;
+}
+#image_list li div {
+	overflow: hidden;
+	width: 90%;
+	height: 80px;
+	margin: 0px auto;
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+#image_list li div img{
+}
+#image_list li div.checked {
+	box-shadow: 2px 2px 20px #888;
+	outline: 3px solid green;
+}
+#save {
+	cursor: pointer;
+}
