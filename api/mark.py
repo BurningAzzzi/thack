@@ -67,4 +67,13 @@ class mark(SpuRequestHandler):
 
         return self._response(Pyobject(Error.success, data))
         
+    def viewer(self,
+               user_id={"atype": int, "adef": 0},
+    ):
+        """总体情况"""
+        sql = "select * from mark where user_id = %s" % user_id
+        data = mysql_conn.query(sql)
+        for i in xrange(0,len(data)):
+            data[i]['create_on'] = str(data[i]['create_on'])
+        return self._html_render("viewer.html", {"markers": data, "user_id": user_id})
 

@@ -40,6 +40,7 @@ body {
 	margin-bottom: 10px;
 }
 #image_list li div img{
+	width: 100%;
 }
 #image_list li div.checked {
 	box-shadow: 2px 2px 20px #888;
