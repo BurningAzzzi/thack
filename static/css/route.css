@@ -1,0 +1,19 @@
+* {
+	margin: 0px;
+	padding: 0px;
+}
+body {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	width: 100%;
+}
+.clear {
+	clear: both;
+}
+#map {
+	width: 100%;
+	top: 0;
+	position: absolute;
+	bottom: 0;
+}

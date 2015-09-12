@@ -79,3 +79,11 @@ class route(SpuRequestHandler):
             data[i]['create_on'] = str(data[i]['create_on'])
         return self._response(Pyobject(Error.success, data))
 
+    def route_detail(self,
+                route_id={"atype": int,"adef":0}
+    ):
+        sql = "select t_rel.resource_id,t_resc.longitude,t_resc.resource_type,t_resc.latitude,t_resc.url,t_resc.create_on from route_resources t_rel left join resource t_resc on t_rel.resource_id = t_resc.id where route_id = %s order by t_resc.create_on" % route_id
+        data = mysql_conn.query(sql)
+        for i in xrange(0,len(data)):
+            data[i]['create_on'] = str(data[i]['create_on'])
+        return self._html_render("route_detail.html", {"resources": data})
