@@ -25,8 +25,8 @@ class message(SpuRequestHandler):
             latitude={"atype": float, "adef": 0.0},
             longitude={"atype": float, "adef": 0.0},
             content={"atype": unicode, "adef": ""},
-            audio_url={"atype": str, "adef": ""},
-            picture_url={"atype": str, "adef": ""},
+            resources={"atype": str, "adef":""},
+            routes={"atype":str, "adef":""},
             category_id={"atype": int,"adef": 0},
             tags={"atype":unicode,"adef": ""},
             with_sku_id={"atype": int, "adef": 0},
@@ -44,13 +44,22 @@ class message(SpuRequestHandler):
         message_obj.latitude = latitude
         message_obj.longitude = longitude
         message_obj.content = content
-        message_obj.audio_url = audio_url
-        message_obj.picture_url = picture_url
         message_obj.with_sku_id = with_sku_id
         message_obj.with_sku_type = with_sku_type
         message_obj.category_id = category_id
         message_obj.tags = tags
         message_id = message_obj.insert()
+
+
+        resourceIds = resources.split(",")
+        for i in xrange(0,len(resourceIds)):
+            sql = "insert into message_resources(message_id,resource_id) values(%s,%s)" % (message_id,resourceIds[i])
+            mysql_conn.execsql(sql)
+        routes = resources.split(",")
+        for i in xrange(0,len(routes)):
+            sql = "insert into message_routes(message_id,route_id) values(%s,%s)" % (message_id,routes[i])
+            mysql_conn.execsql(sql)
+
         # 插入mongodb
         mongo.message.insert({"id": int(message_id), "loc": [longitude, latitude], "category_id": category_id})
         return self._response(Pyobject(Error.success, message_id))

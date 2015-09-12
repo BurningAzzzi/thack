@@ -33,6 +33,8 @@ def init():
     SpuUOM.import_module("im")
     SpuUOM.import_module("user")
     SpuUOM.import_module("test")
+    SpuUOM.import_module("route")
+    SpuUOM.import_module("resource")
     SpuUOM.load()
 
 def start():

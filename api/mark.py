@@ -43,7 +43,7 @@ class mark(SpuRequestHandler):
             return self._response(Pyobject(Error.param_error))
 
         sql = "select * from mark where user_id = %s" % user_id
-        data = mysql_conn.execsql(sql)
+        data = mysql_conn.query(sql)
         return self._response(Pyobject(Error.success, data))
         
 
