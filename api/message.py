@@ -113,6 +113,21 @@ class message(SpuRequestHandler):
         message_list.find(cond)
         return self._response(PyobjectList(Error.success, message_list))
 
+    @POST
+    def nice(self,
+        id={"atype": int, "adef": 0}
+    ):
+        """
+        点赞
+        """
+        if id == 0:
+            return self._response(Pyobject(Error.param_error))
+
+        sql = "update message set nice = nice + 1 where id = %s" % id
+        mysql_conn.execsql(sql)
+        return self._response(Pyobject(Error.success))
+
+
 class sku_type(SpuRequestHandler):
     _logging = SpuLogging(module_name="message", class_name="type")
 
