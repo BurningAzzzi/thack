@@ -59,8 +59,8 @@ class resource(SpuRequestHandler):
             data[i]['create_on'] = str(data[i]['create_on'])
         return self._response(Pyobject(Error.success, data))
 
-    def index(self,
+    def album(self,
               user_id={"atype": int, "adef": ""}
     ):
-        self._html_render("resource.html", output)
+        self._html_render("resource.html", {})
 
