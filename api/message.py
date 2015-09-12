@@ -117,15 +117,15 @@ class message(SpuRequestHandler):
             sql = "select t2.* from message_resources t1 left join resource t2 on t1.resource_id = t2.id where t1.message_id = %s" % id
             message_resources = mysql_conn.query(sql)
             for i in xrange(0,len(message_resources)):
-                data[i]['create_on'] = str(message_resources[i]['create_on'])
+                message_resources[i]['create_on'] = str(message_resources[i]['create_on'])
                 
             data[0]['resources'] = message_resources
 
             sql = "select t2.* from message_routes t1 left join route t2 on t1.route_id = t2.id where t1.message_id = %s" % id
             message_routes = mysql_conn.query(sql)
             for i in xrange(0,len(message_routes)):
-                data[i]['create_on'] = str(message_routes[i]['create_on'])
-                
+                message_routes[i]['create_on'] = str(message_routes[i]['create_on'])
+
             data[0]['routes'] = message_routes
             
             return self._response(PyobjectList(Error.success, data[0]))
@@ -157,13 +157,15 @@ class message(SpuRequestHandler):
         return self._response(Pyobject(Error.success))
 
     def listen(self,
-               id={"atype": int, "adef": 0},
+               user_id={"atype": int, "adef": 0},
+               message_id={"atype": int, "adef": 0},
     ):
         """
         听
         """
         return self._html_render("listen.html", {
-            "id": id,
+            "id": message_id,
+            "user_id": user_id
             })
 
 
