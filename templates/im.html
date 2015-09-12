@@ -80,9 +80,9 @@
 				if (item.id == last_id) {continue};
 				var li;
 				if (item.from_user_id === from) {
-					li = "<li class='even'><a class='user' href='#'><img class='img-responsive avatar_' src='/static/images/avatar-1.png' alt='><span class='user-name'>"+from_user_name+"</span></a><div class='reply-content-box'><span class='reply-time'>"+item.create_on+"</span><div class='reply-content pr'><span class='arrow'>&nbsp;</span><pre>"+item.content+"</pre></div></div></li>";
+					li = "<li class='even'><a class='user' href='#'><img class='img-responsive avatar_' src='/static/images/avatar-1.png' alt='><span class='user-name'>"+from_user_name+"</span></a><div class='reply-content-box'><span class='reply-time'>"+item.create_on+"</span><div class='reply-content pr'><span class='arrow'>&nbsp;</span>"+item.content+"</div></div></li>";
 				}else{
-					li = "<li class='odd'><a class='user' href='#'><img class='img-responsive avatar_' src='/static/images/avatar-1.png' alt='><span class='user-name'>"+to_user_name+"</span></a><div class='reply-content-box'><span class='reply-time'>"+item.create_on+"</span><div class='reply-content pr'><span class='arrow'>&nbsp;</span><pre>"+item.content+"</pre></div></div></li>";
+					li = "<li class='odd'><a class='user' href='#'><img class='img-responsive avatar_' src='/static/images/avatar-1.png' alt='><span class='user-name'>"+to_user_name+"</span></a><div class='reply-content-box'><span class='reply-time'>"+item.create_on+"</span><div class='reply-content pr'><span class='arrow'>&nbsp;</span>"+item.content+"</div></div></li>";
 				}
 				last_id = item.id;
 				$contentList.append(li);
