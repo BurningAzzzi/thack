@@ -10,15 +10,14 @@ body {
 #map {
 	border: 1px solid black;
 	position: fixed;
-	height: 100px;
+	height: 300px;
 	width: 100%;
-	background: pink;
 }
 #album {
 	border: 1px solid black;
 	min-height: 400px;
 	padding-bottom: 20px;
-	padding-top: 300px;
+	padding-top: 000px;
 }
 #image_list {
 	font-size: 0px;
