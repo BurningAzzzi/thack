@@ -24,8 +24,19 @@
 	// var marker = new BMap.Marker(point);
 	// map.addOverlay(marker);    
 
-	function add_marker(point){
+	function add_marker(point, address, mark_time) {
+		var opts = {
+		  	width : 200,     // 信息窗口宽度
+		  	height: 100,     // 信息窗口高度
+		  	title : address , // 信息窗口标题
+		  	enableMessage:true,//设置允许信息窗发送短息
+		  	message:"亲耐滴，晚上一起吃个饭吧？戳下面的链接看下地址喔~"
+		};
+		var infoWindow = new BMap.InfoWindow(mark_time, opts);
 		var marker = new BMap.Marker(point);
+		marker.addEventListener("click", function(){          
+			map.openInfoWindow(infoWindow, point); //开启信息窗口
+		});
 		map.addOverlay(marker);
 	}
 
@@ -37,8 +48,18 @@
 		new BMap.Point({{marker.get("longitude", "")}}, {{marker.get("latitude", "")}}),
 	{% end %}
 	];
+	var address_list = [
+	{% for marker in markers %}
+		'{{marker.get("address", "")}}',
+	{% end %}
+	]
+	var mark_time_list = [
+	{% for marker in markers %}
+		'{{marker.get("mark_time", "")}}',
+	{% end %}
+	]
 	for (var i = point_list.length - 1; i >= 0; i--) {
-		add_marker(point_list[i]);
+		add_marker(point_list[i], address_list[i], mark_time_list[i]);
 	};
 	var polyline = new BMap.Polyline(point_list, {strokeColor:"blue", strokeWeight:2, strokeOpacity:0.5});
 	map.addOverlay(polyline);
