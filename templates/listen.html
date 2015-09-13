@@ -56,9 +56,10 @@
 	var page_data = eval('(' + "{{pyobject}}" + ')');
 	var message_id = page_data.result.id;
 	var user_id = page_data.result.user_id;
+	var to_user_id;
 	$(function(){
 		$("#btn-contact").on("click",function(){
-			location.href="/im/im/index?from_user_id="+user_id+"&to_user_id="+page_data.result.user_id;
+			location.href="/im/im/index?from_user_id="+user_id+"&to_user_id="+to_user_id;
 		});
 
 		$("#btn-nice").on("click",function(){
@@ -73,6 +74,7 @@
 			data = data.result;
 			console.info(data);
 			$("#createor").html(data.username);
+			to_user_id = data.user_id;
 
 			$("#content-text").html(data.content);
 			for (var i = data.resources.length - 1; i >= 0; i--) {
