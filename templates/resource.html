@@ -113,10 +113,11 @@
 			var url = "/route/route/add";
 			$.post(url, {"user_id": user_id, "resources": id_list.join()}, function(data){
 				// $("#global_item").html(data);
-				data = JSON.parse(data);
-				route_id = data.result;
-				// alert(route_id);
-				location.href="/weige/?route_id=" + route_id;
+				alert("创建成功");
+				// data = JSON.parse(data);
+				// route_id = data.result;
+				// // alert(route_id);
+				// location.href="/weige/?route_id=" + route_id;
 			});
 		});
 	})
