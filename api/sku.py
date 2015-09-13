@@ -48,7 +48,8 @@ class sight(SpuRequestHandler):
         return self._response(Pyobject(Error.success, data))
         
     def page(self,
-             id={"adef": 0, "atype": int}
+             scenic_id={"adef": 0, "atype": int}
     ):
-        return self._html_render("sight.html", {})
+        url = "http://h5.m.taobao.com/trip/ticket/scenic-spot/detail.html?scenicId=" + str(scenic_id)
+        return self.tornado.redirect(url)
 
