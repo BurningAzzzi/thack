@@ -20,7 +20,9 @@
 				<div class="col-md-1-1">
 					<div style="min-height:45px;width:100%;margin:0;padding:0;background-color:rgba(255,255,255,1);z-index:9999;position:fixed;text-align:center;">
 						<a href="javascript:void(0);" id="btn-nice">
-							<span class="glyphicon glyphicon-thumbs-up" aria-hidden="true" style="top: 10px; right: 10px; font-size: 25px;"></span>赞
+							by: <span id="createor"></span>
+	&nbsp;&nbsp;&nbsp;&nbsp;
+							<span class="glyphicon glyphicon-thumbs-up" aria-hidden="true" style="top: 10px; right: 10px; font-size: 25px;"></span>赞 
 						</a>
 					</div>
 					<img src="" id="content-image" class="img-responsive" alt="Responsive image"></img>
@@ -70,6 +72,7 @@
 			data = eval('(' + data + ')');
 			data = data.result;
 			console.info(data);
+			$("#createor").html(data.username);
 
 			$("#content-text").html(data.content);
 			for (var i = data.resources.length - 1; i >= 0; i--) {

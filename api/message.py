@@ -109,7 +109,7 @@ class message(SpuRequestHandler):
         if id == 0:
             return self._response(Pyobject(Error.param_error))
 
-        sql = "select * from message where id = %s" % id
+        sql = "select t2.*,t3.username username from message t2 left join user t3 on t2.user_id = t3.id where t2.id = %s" % id
         data = mysql_conn.query(sql)
         if len(data) > 0 :
             data[0]['create_on'] = str(data[0]['create_on'])
