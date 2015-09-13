@@ -31,7 +31,7 @@ class resource(SpuRequestHandler):
         if user_id == 0 or url == 0:
             return self._response(Pyobject(Error.param_error))
 
-        sql = "insert into resource(user_id,url,resource_type,longitude,latitude,create_on) values(%s,%s,%s,%s,%s,now())" % (
+        sql = "insert into resource(user_id,url,resource_type,longitude,latitude,create_on) values(%s,'%s',%s,%s,%s,now())" % (
             user_id,
             url, 
             resource_type,
