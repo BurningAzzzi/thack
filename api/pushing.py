@@ -35,6 +35,7 @@ class pushing(SpuRequestHandler):
                 to_user_id, 
                 message_id,
                 1)
+            
             data = mysql_conn.execsql(sql)
             return self._response(Pyobject(Error.success, data))
         else:
