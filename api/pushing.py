@@ -26,7 +26,6 @@ class pushing(SpuRequestHandler):
         """
         if from_user_id == 0 or message_id == 0:
             return self._response(Pyobject(Error.param_error))
-
         sql = "select user_id from message where id = %s" % message_id
         result = mysql_conn.query(sql)
         if len(result) > 0:
